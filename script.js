@@ -31,7 +31,7 @@ form.addEventListener('submit', (e) => {
   const task = {
     value: input.value,
     isCompleted: false,
-    deadLine: timeInput.value,
+    deadLine: timeInput.value || 'noDeadLine',
   };
   tasks.push(task);
   localStorage.setItem('task', JSON.stringify(tasks));
@@ -78,14 +78,15 @@ function createTimer(task, element) {
   let currentTime =
     today.getHours() * hours + today.getMinutes() * minutes + today.getSeconds() * seconds;
   let deadLineArr = task.deadLine.split(':');
+
   let deadLine = deadLineArr[0] * hours + deadLineArr[1] * minutes;
 
   let gap = deadLine > currentTime ? deadLine - currentTime : deadLine - (currentTime - hours * 24);
 
   let hoursLeft = Math.floor(gap / hours);
   let minutesLeft = Math.floor((gap % hours) / minutes);
-  let secondsLeft = Math.floor((gap % minutes) / seconds);
-  element.textContent = `${hoursLeft} HOURS ${minutesLeft} MINUTES ${secondsLeft} SECONDS LEFT`;
+
+  element.textContent = `${hoursLeft} HOURS ${minutesLeft} MINUTES LEFT`;
 }
 
 function deleteTask(task, element) {
