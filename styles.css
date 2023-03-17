@@ -1,0 +1,150 @@
+:root {
+  --clr-bg-darker: hsl(221, 24%, 10%);
+  --clr-bg: hsl(221, 24%, 13%);
+  --clr-bg-items: hsl(221, 24%, 23%);
+  --clr-dark-blue: hsl(209, 57%, 17%);
+  --clr-green: hsl(163, 99%, 38%);
+  --clr-gray: hsl(221, 7%, 44%);
+  --clr-white: hsl(0, 0%, 100%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Space Mono', monospace;
+  background-color: var(--clr-bg);
+  color: var(--clr-white);
+}
+
+input,
+button,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+.container {
+  display: grid;
+  place-content: center;
+  color: var(--clr-white);
+  border-bottom: 2px solid var(--clr-white);
+  box-shadow: 0 0 12px var(--clr-white);
+  padding: 0 1rem;
+  padding-bottom: 3rem;
+}
+
+.title {
+  margin-top: 4rem;
+  font-size: 3rem;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.add-icon {
+  font-size: 1.5rem;
+}
+
+.form {
+  display: flex;
+}
+
+.input {
+  background-color: var(--clr-bg-items);
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  box-shadow: 0 0 5px var(--clr-grey);
+  height: 32px;
+  resize: none;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+.list {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  grid-template-columns: 90%;
+  margin-top: 3rem;
+}
+
+.list-item {
+  background-color: var(--clr-bg-darker);
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+  border-radius: 16px;
+  overflow: hidden;
+  max-width: 500px;
+  box-shadow: 0px 0px 6px 2px;
+  transition: all 0.4s linear;
+  opacity: 0;
+  max-height: 0px;
+  margin-bottom: 3rem;
+  margin: 0;
+}
+
+.list-item.show {
+  opacity: 1;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  max-height: 12rem;
+}
+
+.fa-sharp {
+  font-size: 1.25rem;
+}
+
+.check,
+.edit,
+.delete {
+  transition: all 0.1s linear;
+}
+
+.check:hover {
+  transform: scale(1.06);
+  color: var(--clr-green);
+}
+
+.edit:hover {
+  transform: scale(1.06);
+  color: lightblue;
+}
+
+.delete:hover {
+  transform: scale(1.06);
+  color: hsl(0, 80%, 60%);
+}
+
+.item-text {
+  background-color: var(--clr-bg-darker);
+  padding-bottom: 8px;
+  flex-grow: 1;
+  word-wrap: break-word;
+  overflow: hidden;
+}
+
+@media (max-width: 450px) {
+  .list-item {
+    gap: 0.25rem;
+  }
+}
