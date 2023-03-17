@@ -48,9 +48,6 @@ function createTask(task) {
   const textarea = template.querySelector('.item-text');
   const time = template.querySelector('.time');
 
-  setInterval(() => {
-    createTimer(task, time);
-  }, 1000);
   createTimer(task, time);
 
   template.querySelector('.delete').addEventListener('click', () => deleteTask(task, element));
@@ -70,9 +67,12 @@ function createTask(task) {
 }
 
 function createTimer(task, element) {
+  let timeout = setTimeout(createTimer, 1000, task, element);
   if (task.deadLine === 'noDeadLine') {
     return;
   }
+
+  console.log('dziala');
 
   const seconds = 1000;
   const minutes = seconds * 60;
@@ -90,7 +90,12 @@ function createTimer(task, element) {
   let hoursLeft = Math.floor(gap / hours);
   let minutesLeft = Math.floor((gap % hours) / minutes);
 
-  element.textContent = `${hoursLeft} HOURS ${minutesLeft} MINUTES LEFT`;
+  if (minutesLeft === 0 && today.getSeconds() === 59) {
+    element.textContent = 'END OF TIME';
+    clearTimeout(timeout);
+  } else {
+    element.textContent = `${hoursLeft} HOURS ${minutesLeft} MINUTES LEFT`;
+  }
 }
 
 function deleteTask(task, element) {
