@@ -1,6 +1,7 @@
 const textarea = document.querySelector('.input');
 const form = document.querySelector('.form');
 const input = document.querySelector('.input');
+const timeInput = document.querySelector('.time-input');
 const itemTemplate = document.querySelector('.list-item-temp');
 const itemContainer = document.querySelector('.list');
 const title = document.querySelector('.title');
@@ -22,11 +23,15 @@ if (localStorage.getItem('task')) {
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
-  if (!input.value) return;
+  if (input.value.trim() === '') {
+    form.reset();
+    return;
+  }
 
   const task = {
     value: input.value,
     isCompleted: false,
+    deadLine: timeInput.value,
   };
   tasks.push(task);
   localStorage.setItem('task', JSON.stringify(tasks));
@@ -41,6 +46,12 @@ function createTask(task) {
   const template = itemTemplate.content.cloneNode(true);
   const element = template.querySelector('.list-item');
   const textarea = template.querySelector('.item-text');
+  const time = template.querySelector('.time');
+
+  setInterval(() => {
+    createTimer(task, time);
+  }, 1000);
+  createTimer(task, time);
 
   template.querySelector('.delete').addEventListener('click', () => deleteTask(task, element));
   template.querySelector('.edit').addEventListener('click', () => editTask(task, element));
@@ -56,6 +67,25 @@ function createTask(task) {
 
   itemContainer.appendChild(template);
   // coolTextLoad(textarea);
+}
+
+function createTimer(task, element) {
+  const seconds = 1000;
+  const minutes = seconds * 60;
+  const hours = minutes * 60;
+
+  let today = new Date();
+  let currentTime =
+    today.getHours() * hours + today.getMinutes() * minutes + today.getSeconds() * seconds;
+  let deadLineArr = task.deadLine.split(':');
+  let deadLine = deadLineArr[0] * hours + deadLineArr[1] * minutes;
+
+  let gap = deadLine > currentTime ? deadLine - currentTime : deadLine - (currentTime - hours * 24);
+
+  let hoursLeft = Math.floor(gap / hours);
+  let minutesLeft = Math.floor((gap % hours) / minutes);
+  let secondsLeft = Math.floor((gap % minutes) / seconds);
+  element.textContent = `${hoursLeft} HOURS ${minutesLeft} MINUTES ${secondsLeft} SECONDS LEFT`;
 }
 
 function deleteTask(task, element) {
