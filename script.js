@@ -70,6 +70,10 @@ function createTask(task) {
 }
 
 function createTimer(task, element) {
+  if (task.deadLine === 'noDeadLine') {
+    return;
+  }
+
   const seconds = 1000;
   const minutes = seconds * 60;
   const hours = minutes * 60;
