@@ -6,7 +6,7 @@ const itemContainer = document.querySelector('.list');
 const title = document.querySelector('.title');
 const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-coolTextLoad(title);
+// coolTextLoad(title);
 
 textarea.addEventListener('keyup', (e) => {
   textarea.style.height = '32px';
@@ -55,7 +55,7 @@ function createTask(task) {
   }, 10);
 
   itemContainer.appendChild(template);
-  coolTextLoad(textarea);
+  // coolTextLoad(textarea);
 }
 
 function deleteTask(task, element) {
@@ -74,7 +74,7 @@ function editTask(task, element) {
     tasks[tasks.indexOf(task)].value = textarea.textContent;
     localStorage.setItem('task', JSON.stringify(tasks));
     textarea.setAttribute('data-value', textarea.textContent);
-    coolTextLoad(textarea);
+    // coolTextLoad(textarea);
   } else {
     textarea.setAttribute('contenteditable', 'true');
   }
@@ -82,30 +82,30 @@ function editTask(task, element) {
 
 function checkTask(task, element) {
   const textarea = element.querySelector('.item-text');
-  coolTextLoad(textarea);
+  // coolTextLoad(textarea);
   tasks[tasks.indexOf(task)].isCompleted = true;
   localStorage.setItem('task', JSON.stringify(tasks));
   element.style.color = 'var(--clr-green)';
 }
 
-function coolTextLoad(element) {
-  let iteration = Math.floor(element.textContent.length / 6);
-  let interval = setInterval(() => {
-    element.textContent = element.textContent
-      .split('')
-      .map((letter, index) => {
-        return index < iteration
-          ? element.dataset.value[index]
-          : letter !== ' ' && letter === letter.toLowerCase()
-          ? letters[Math.floor(Math.random() * 26)].toLowerCase()
-          : letter !== ' '
-          ? letters[Math.floor(Math.random() * 26)]
-          : ' ';
-      })
-      .join('');
-    if (iteration > element.textContent.length) {
-      clearInterval(interval);
-    }
-    iteration += 1;
-  }, 60);
-}
+// function coolTextLoad(element) {
+//   let iteration = Math.floor(element.textContent.length / 6);
+//   let interval = setInterval(() => {
+//     element.textContent = element.textContent
+//       .split('')
+//       .map((letter, index) => {
+//         return index < iteration
+//           ? element.dataset.value[index]
+//           : letter !== ' ' && letter === letter.toLowerCase()
+//           ? letters[Math.floor(Math.random() * 26)].toLowerCase()
+//           : letter !== ' '
+//           ? letters[Math.floor(Math.random() * 26)]
+//           : ' ';
+//       })
+//       .join('');
+//     if (iteration > element.textContent.length) {
+//       clearInterval(interval);
+//     }
+//     iteration += 1;
+//   }, 60);
+// }
