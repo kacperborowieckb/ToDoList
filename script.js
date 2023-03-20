@@ -31,7 +31,7 @@ form.addEventListener('submit', (e) => {
   const task = {
     value: input.value,
     isCompleted: false,
-    deadLine: timeInput.value || 'noDeadLine',
+    deadLine: timeInput.value || 'No dead line',
   };
   tasks.push(task);
   localStorage.setItem('task', JSON.stringify(tasks));
@@ -57,6 +57,7 @@ function createTask(task) {
   textarea.textContent = task.value;
   if (task.isCompleted === true) {
     element.style.color = 'var(--clr-green)';
+    element.querySelector('.edit').setAttribute('disabled', 'disabled');
   }
   setTimeout(() => {
     element.classList.add('show');
@@ -67,12 +68,20 @@ function createTask(task) {
 }
 
 function createTimer(task, element) {
-  let timeout = setTimeout(createTimer, 1000, task, element);
-  if (task.deadLine === 'noDeadLine') {
+  if (task.isCompleted === true) {
+    element.textContent = 'FINISHED!';
     return;
   }
 
-  console.log('dziala');
+  if (task.deadLine === 'No dead line') {
+    return;
+  } else if (task.deadLine === 'End of time') {
+    element.textContent = 'END OF TIME';
+    element.parentElement.style.opacity = 0.6;
+    return;
+  }
+
+  let timeout = setTimeout(createTimer, 1000, task, element);
 
   const seconds = 1000;
   const minutes = seconds * 60;
@@ -92,10 +101,14 @@ function createTimer(task, element) {
 
   if (minutesLeft === 0 && today.getSeconds() === 59) {
     element.textContent = 'END OF TIME';
+    task.deadLine = 'End of time';
+    localStorage.setItem('task', JSON.stringify(tasks));
+    element.parentElement.style.opacity = 0.6;
     clearTimeout(timeout);
   } else {
     element.textContent = `${hoursLeft} HOURS ${minutesLeft} MINUTES LEFT`;
   }
+  console.log(';c');
 }
 
 function deleteTask(task, element) {
@@ -111,7 +124,7 @@ function editTask(task, element) {
   const textarea = element.querySelector('.item-text');
   if (textarea.hasAttribute('contenteditable', 'true')) {
     textarea.removeAttribute('contenteditable');
-    tasks[tasks.indexOf(task)].value = textarea.textContent;
+    task.value = textarea.textContent;
     localStorage.setItem('task', JSON.stringify(tasks));
     textarea.setAttribute('data-value', textarea.textContent);
     // coolTextLoad(textarea);
@@ -123,9 +136,12 @@ function editTask(task, element) {
 function checkTask(task, element) {
   const textarea = element.querySelector('.item-text');
   // coolTextLoad(textarea);
-  tasks[tasks.indexOf(task)].isCompleted = true;
+  task.isCompleted = true;
   localStorage.setItem('task', JSON.stringify(tasks));
   element.style.color = 'var(--clr-green)';
+  element.querySelector('p').textContent = 'FINISHED!';
+  element.style.opacity = 1;
+  element.querySelector('.edit').setAttribute('disabled', 'disabled');
 }
 
 // function coolTextLoad(element) {
