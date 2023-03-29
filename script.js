@@ -1,18 +1,21 @@
-const textarea = document.querySelector('.input');
 const form = document.querySelector('.form');
 const input = document.querySelector('.input');
+const submitBtn = document.querySelector('.add-button');
 const timeInput = document.querySelector('.time-input');
 const itemTemplate = document.querySelector('.list-item-temp');
 const itemContainer = document.querySelector('.list');
-const title = document.querySelector('.title');
-const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const seconds = 1000;
+const minutes = seconds * 60;
+const hours = minutes * 60;
 
-// coolTextLoad(title);
-
-textarea.addEventListener('keyup', (e) => {
-  textarea.style.height = '32px';
+input.addEventListener('keydown', (e) => {
+  if (e.code === 'Enter') {
+    submitBtn.click();
+    e.preventDefault();
+  }
+  input.style.height = '32px';
   let scHeight = e.target.scrollHeight;
-  textarea.style.height = `${scHeight}px`;
+  input.style.height = `${scHeight}px`;
 });
 
 let tasks = JSON.parse(localStorage.getItem('task')) || [];
@@ -40,6 +43,7 @@ form.addEventListener('submit', (e) => {
 
   form.reset();
   input.focus();
+  input.style.height = '32px';
 });
 
 function createTask(task) {
@@ -53,7 +57,7 @@ function createTask(task) {
   template.querySelector('.delete').addEventListener('click', () => deleteTask(task, element));
   template.querySelector('.edit').addEventListener('click', () => editTask(task, element));
   template.querySelector('.check').addEventListener('click', () => checkTask(task, element));
-  textarea.setAttribute('data-value', task.value);
+
   textarea.textContent = task.value;
   if (task.isCompleted === true) {
     element.style.color = 'var(--clr-green)';
@@ -64,7 +68,6 @@ function createTask(task) {
   }, 10);
 
   itemContainer.appendChild(template);
-  // coolTextLoad(textarea);
 }
 
 function createTimer(task, element) {
@@ -83,10 +86,6 @@ function createTimer(task, element) {
 
   let timeout = setTimeout(createTimer, 1000, task, element);
 
-  const seconds = 1000;
-  const minutes = seconds * 60;
-  const hours = minutes * 60;
-
   let today = new Date();
   let currentTime =
     today.getHours() * hours + today.getMinutes() * minutes + today.getSeconds() * seconds;
@@ -99,7 +98,7 @@ function createTimer(task, element) {
   let hoursLeft = Math.floor(gap / hours);
   let minutesLeft = Math.floor((gap % hours) / minutes);
 
-  if (minutesLeft === 0 && today.getSeconds() === 59) {
+  if (hoursLeft === 0 && minutesLeft === 0 && today.getSeconds() === 59) {
     element.textContent = 'END OF TIME';
     task.deadLine = 'End of time';
     localStorage.setItem('task', JSON.stringify(tasks));
@@ -108,7 +107,6 @@ function createTimer(task, element) {
   } else {
     element.textContent = `${hoursLeft} HOURS ${minutesLeft} MINUTES LEFT`;
   }
-  console.log(';c');
 }
 
 function deleteTask(task, element) {
@@ -127,15 +125,14 @@ function editTask(task, element) {
     task.value = textarea.textContent;
     localStorage.setItem('task', JSON.stringify(tasks));
     textarea.setAttribute('data-value', textarea.textContent);
-    // coolTextLoad(textarea);
+    textarea.style['box-shadow'] = '';
   } else {
     textarea.setAttribute('contenteditable', 'true');
+    textarea.style['box-shadow'] = '0px 0px 5px hsla(0, 0%, 100%, 0.2)';
   }
 }
 
 function checkTask(task, element) {
-  const textarea = element.querySelector('.item-text');
-  // coolTextLoad(textarea);
   task.isCompleted = true;
   localStorage.setItem('task', JSON.stringify(tasks));
   element.style.color = 'var(--clr-green)';
@@ -143,25 +140,3 @@ function checkTask(task, element) {
   element.style.opacity = 1;
   element.querySelector('.edit').setAttribute('disabled', 'disabled');
 }
-
-// function coolTextLoad(element) {
-//   let iteration = Math.floor(element.textContent.length / 6);
-//   let interval = setInterval(() => {
-//     element.textContent = element.textContent
-//       .split('')
-//       .map((letter, index) => {
-//         return index < iteration
-//           ? element.dataset.value[index]
-//           : letter !== ' ' && letter === letter.toLowerCase()
-//           ? letters[Math.floor(Math.random() * 26)].toLowerCase()
-//           : letter !== ' '
-//           ? letters[Math.floor(Math.random() * 26)]
-//           : ' ';
-//       })
-//       .join('');
-//     if (iteration > element.textContent.length) {
-//       clearInterval(interval);
-//     }
-//     iteration += 1;
-//   }, 60);
-// }
