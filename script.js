@@ -36,7 +36,7 @@ form.addEventListener('submit', (e) => {
   const task = {
     value: input.value,
     isCompleted: false,
-    deadLine: timeInput
+    deadLine: timeInput.value
       ? {
           time: timeInput.value,
           year: date.getFullYear(),
