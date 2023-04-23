@@ -31,7 +31,21 @@ form.addEventListener('submit', (e) => {
     return;
   }
 
-  let date = new Date();
+  let today = new Date();
+  let date = new Date(today);
+
+  if (
+    Number(timeInput.value.split(':').join('')) <
+    Number(
+      today.getHours() +
+        '' +
+        (today.getMinutes() < 10 ? `0${today.getMinutes()}` : today.getMinutes())
+    )
+  ) {
+    date.setDate(today.getDate() + 1);
+  }
+
+  console.log(date);
 
   const task = {
     value: input.value,
@@ -107,20 +121,37 @@ function createTimer(task, element) {
   let hoursLeft = Math.floor(gap / hours);
   let minutesLeft = Math.floor((gap % hours) / minutes);
 
-  if (
-    new Date(`${task.deadLine.year}-${task.deadLine.month}-${task.deadLine.day}`).getTime() >=
-      today.getTime() ||
-    Number(task.deadLine.time.split(':').join('')) <=
-      Number(today.getHours() + '' + today.getMinutes())
-  ) {
-    element.textContent = 'END OF TIME';
-    task.deadLine = 'End of time';
-    localStorage.setItem('task', JSON.stringify(tasks));
-    element.parentElement.style.opacity = 0.6;
-    clearTimeout(timeout);
+  if (task.deadLine.day === today.getDate()) {
+    if (
+      Number(task.deadLine.time.split(':').join('')) <=
+      Number(
+        today.getHours() +
+          '' +
+          (today.getMinutes() < 10 ? `0${today.getMinutes()}` : today.getMinutes())
+      )
+    ) {
+      deleteTimer(element, task, timeout);
+      return;
+    }
+    element.textContent = `${hoursLeft} HOURS ${minutesLeft} MINUTES LEFT`;
   } else {
+    if (
+      new Date(`${task.deadLine.year}-${task.deadLine.month + 1}-${task.deadLine.day}`).getTime() <
+      today.getTime()
+    ) {
+      deleteTimer(element, task, timeout);
+      return;
+    }
     element.textContent = `${hoursLeft} HOURS ${minutesLeft} MINUTES LEFT`;
   }
+}
+
+function deleteTimer(element, task, timeout) {
+  element.textContent = 'END OF TIME';
+  task.deadLine = 'End of time';
+  localStorage.setItem('task', JSON.stringify(tasks));
+  element.parentElement.style.opacity = 0.6;
+  clearTimeout(timeout);
 }
 
 function deleteTask(task, element) {
