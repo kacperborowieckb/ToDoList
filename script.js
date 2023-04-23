@@ -31,10 +31,19 @@ form.addEventListener('submit', (e) => {
     return;
   }
 
+  let date = new Date();
+
   const task = {
     value: input.value,
     isCompleted: false,
-    deadLine: timeInput.value || 'No dead line',
+    deadLine: timeInput
+      ? {
+          time: timeInput.value,
+          year: date.getFullYear(),
+          month: date.getMonth(),
+          day: date.getDate(),
+        }
+      : 'No dead line',
   };
   tasks.push(task);
   localStorage.setItem('task', JSON.stringify(tasks));
@@ -89,7 +98,7 @@ function createTimer(task, element) {
   let today = new Date();
   let currentTime =
     today.getHours() * hours + today.getMinutes() * minutes + today.getSeconds() * seconds;
-  let deadLineArr = task.deadLine.split(':');
+  let deadLineArr = task.deadLine.time.split(':');
 
   let deadLine = deadLineArr[0] * hours + deadLineArr[1] * minutes;
 
@@ -98,7 +107,12 @@ function createTimer(task, element) {
   let hoursLeft = Math.floor(gap / hours);
   let minutesLeft = Math.floor((gap % hours) / minutes);
 
-  if (hoursLeft === 0 && minutesLeft === 0 && today.getSeconds() === 59) {
+  if (
+    new Date(`${task.deadLine.year}-${task.deadLine.month}-${task.deadLine.day}`).getTime() >=
+      today.getTime() ||
+    Number(task.deadLine.time.split(':').join('')) <=
+      Number(today.getHours() + '' + today.getMinutes())
+  ) {
     element.textContent = 'END OF TIME';
     task.deadLine = 'End of time';
     localStorage.setItem('task', JSON.stringify(tasks));

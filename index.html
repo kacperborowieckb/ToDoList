@@ -18,8 +18,8 @@
     />
   </head>
   <body>
-    <div class="container">
-      <h1 class="title" data-value="TO DO LIST">TO DO LIST</h1>
+    <header class="container">
+      <h1 class="title">TO DO LIST</h1>
       <form class="form">
         <textarea type="text" class="input" required placeholder="Type something.."></textarea>
         <button type="submit" class="add-button">
@@ -27,20 +27,20 @@
         </button>
         <input id="time" type="time" class="time-input" />
       </form>
-    </div>
-    <div class="list">
+    </header>
+    <main class="list">
       <template class="list-item-temp">
-        <div class="list-item">
+        <section class="list-item">
           <p class="time"></p>
-          <div class="list-item-content">
+          <section class="list-item-content">
             <button class="check"><i class="fa-sharp fa-solid fa-check check"></i></button>
-            <div class="item-text"></div>
+            <section class="item-text"></section>
             <button class="edit"><i class="fa-sharp fa-regular fa-pen-to-square edit"></i></button>
             <button class="delete"><i class="fa-sharp fa-solid fa-trash delete"></i></button>
-          </div>
-        </div>
+          </section>
+        </section>
       </template>
-    </div>
+    </main>
     <script src="/script.js"></script>
   </body>
 </html>
