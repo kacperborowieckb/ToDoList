@@ -1,9 +1,13 @@
-## ToDoList
+# ToDoList
 
-# About the project
+## About the project
 Basic to do list with time input for practice my js skills.
 
 Live: https://bejewelled-tiramisu-c866ae.netlify.app/
+
+### Build with:
+- Vanilla js
+- CSS
 
 #### What I learned:
 - Dom manipulation
